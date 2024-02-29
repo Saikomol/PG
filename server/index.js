@@ -1,13 +1,14 @@
 
 const express = require('express');
 const app = express();
-//const path = require('path');
+const path = require('path');
 const pg = require('pg');
 
 console.log("hello world");
 
 const client = new pg.Client(process.env.DATABASE_URL || 'postgres://localhost/acme_notes_db')
-
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('/', (req, res)=> res.sendFile(path.join(__dirname, '../client/dist/index.html')))
 app.get('/api/notes', async(req, res, next)=> {
     try{
         const SQL = `
